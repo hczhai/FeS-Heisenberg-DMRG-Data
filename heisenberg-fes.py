@@ -30,18 +30,18 @@ def perform_dmrg(local_spin, global_spins, topology, n_sites):
     for spin in global_spins:
         target = driver.target
         target.twos = target.twos_low = spin
-        ket = driver.get_random_mps(tag='GS', bond_dim=200, nroots=12)
+        ket = driver.get_random_mps(tag='GS', bond_dim=200, nroots=24)
         eners = driver.dmrg(heis_mpo, ket, n_sweeps=20, iprint=0,
                                   bond_dims=bond_dims, noises=noises,
                                   thrds=dav_thrds, dav_max_iter=100, cutoff=0)
         all_eners.append(eners)
-        print('2S = %d : E =' % spin, ('%14.8f' * len(eners)) % tuple(eners))
+        print('2S = %d : E =' % spin, ('%8.3f' * len(eners)) % tuple(eners))
 
     print("\nRelative energies:\n")
     ener_min = np.min([np.min(x) for x in all_eners])
     for spin, eners in zip(global_spins, all_eners):
         eners = np.array(eners) - ener_min
-        print('2S = %d : E =' % spin, ('%14.8f' * len(eners)) % tuple(eners))
+        print('2S = %d : E =' % spin, ('%8.3f' * len(eners)) % tuple(eners))
 
 n_sites = 4
 topology = [
